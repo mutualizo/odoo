@@ -623,7 +623,11 @@ class JsonRequest(WebRequest):
             _logger.info('%s: %s', self.httprequest.path, msg)
             raise werkzeug.exceptions.BadRequest(msg)
 
-        self.params = dict(self.jsonrequest.get("params", {}))
+        try:
+            self.params = dict(self.jsonrequest.get("params", {}))
+        except:
+            pass
+            
         self.context = self.params.pop('context', dict(self.session.context))
 
     def _json_response(self, result=None, error=None):
