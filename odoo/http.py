@@ -631,10 +631,14 @@ class JsonRequest(WebRequest):
         self.context = self.params.pop('context', dict(self.session.context))
 
     def _json_response(self, result=None, error=None):
+        if type(self.jsonrequest) is list:
+            ids = [item.get("id", False) for item in self.jsonrequest]
+        elif type(self.jsonrequest) is dict:
+            ids = self.jsonrequest.get('id') 
         response = {
             'jsonrpc': '2.0',
-            'id': self.jsonrequest.get('id')
-            }
+            'id': ids
+        }
         if error is not None:
             response['error'] = error
         if result is not None:
